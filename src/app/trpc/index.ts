@@ -1,4 +1,4 @@
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/dist/types/server';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { publicProcedure, router } from './trpc';
 import { TRPCError } from '@trpc/server';
 
@@ -12,7 +12,9 @@ export const appRouter = router({
       throw new TRPCError({ code: 'UNAUTHORIZED'})
     }
     
-    //
+    // check if user in database
+
+    return({success: true})
   })
 });
 
