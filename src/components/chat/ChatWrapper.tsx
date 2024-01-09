@@ -5,22 +5,20 @@ import ChatInput from './ChatInput'
 import { ChevronLeft, Loader2, XCircle } from 'lucide-react'
 import Link from 'next/link'
 import { buttonVariants } from '../ui/button'
+import Messages from './Messages'
 
 interface ChatWrapperProps {
   fileId: string
-//   isSubscribed: boolean
 }
 
-const ChatWrapper = ({
-  fileId,
-}: ChatWrapperProps) => {
-  const { data, isLoading } =
-    trpc.getFileUploadStatus.useQuery(
+const ChatWrapper = ({ fileId, }: ChatWrapperProps) => {
+  const { data, isLoading } = trpc.getFileUploadStatus.useQuery(
       {
-        fileId,
+        fileId,  // this query takes in fileinput
       },
       {
-        refetchInterval: (data) =>
+        // keep searching the file at regular intervals until we get a failed or succcessful
+        refetchInterval: (data) => 
           data?.status === 'SUCCESS' ||
           data?.status === 'FAILED'
             ? false
@@ -94,7 +92,13 @@ const ChatWrapper = ({
       </div>
     )
 
-  return <div>Context Wrapper</div>
+  return <div className='relative min-h-full bg-zinc-50 flex divide-y divide-zinc-200 flex-col justify-between gap-2'>
+    <div className='flex-1 justify-between flex flex-col mb-28'>
+      <Messages />
+    </div>    
+
+    <ChatInput />
+  </div>
 }
 
 export default ChatWrapper
